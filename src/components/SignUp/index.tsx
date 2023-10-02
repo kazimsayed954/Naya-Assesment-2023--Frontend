@@ -14,6 +14,7 @@ import {
   InputRightElement,
   useColorModeValue,
   Text,
+  useToast,
 } from "@chakra-ui/react";
 import CustomCard from "../Card";
 import { ViewIcon, ViewOffIcon } from "@chakra-ui/icons";
@@ -37,7 +38,7 @@ function SignUp() {
   const textColorDetails = useColorModeValue("navy.700", "secondaryGray.600");
   const textColorBrand = useColorModeValue("brand.500", "white");
   const brandStars = useColorModeValue("brand.500", "brand.400");
-
+  const toast = useToast();
   interface FormData {
     name:string,
     email: string;
@@ -72,8 +73,12 @@ function SignUp() {
 
       // Handle the response, e.g., store user data in state or redirect to another page
       console.log("API response:", response.data);
-      if(response.status === 200){
-        localStorage.setItem("id-token",JSON.stringify(response?.data?.token));
+      if(response.status === 201){
+        toast({
+          title: response.data?.message,
+          status: "success",
+          isClosable: true,
+        });
       }
 
       // Reset the form data
@@ -82,9 +87,16 @@ function SignUp() {
         email: "",
         password: "",
       });
-    } catch (error) {
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    } catch (error:any) {
       // Handle errors, e.g., display an error message to the user
       console.error("API error:", error);
+      toast({
+        title: error?.response?.data?.message,
+        status: "error",
+        isClosable: true,
+        duration: 3000,
+      });
     }
     finally{
     setShow((prev)=>({...prev,loader:false}));

@@ -22,7 +22,7 @@ const gameData = [
         Avatar1,
       ],
       image:T3,
-      path:"/game",
+      path:"/game/tictactoe",
       highestscore:3
 
 },

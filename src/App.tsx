@@ -6,16 +6,18 @@ import PageNotFound from "./components/404";
 import "./App.css";
 import LandingPage from "./components/LandingPage";
 // import AdminNavbar from "./components/NavBar";
-import Game from "./components/TicTacToe";
+import Game from "./components/Games/TicTacToe/Multiplayer";
 import { useSelector } from "react-redux";
 import { useEffect, useState } from "react";
-import MineSweeperGame from '../src/components/Games/MineSweeper/index';
+import MineSweeperGame from "../src/components/Games/MineSweeper/index";
+import { Box, Spinner } from "@chakra-ui/react";
 // import PrivateRoute from "../HOC/PrivateRoute";
 
 function App() {
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const authState = useSelector((state: any) => state.auth);
   const [isAuthenticated, setIsAuthenticated] = useState(false);
+  const [isLoading, setIsLoading] = useState(true); // Add loading state
 
   useEffect(() => {
     if (
@@ -26,34 +28,54 @@ function App() {
     ) {
       setIsAuthenticated(true);
     }
-  }, []);
+    setIsLoading(false);
+  }, [authState]);
   return (
     <>
       <main>
-        <Routes>
-          {!isAuthenticated && (
-            <>
-              <Route path={`/`} Component={SignIn} />
-              <Route path={`/signin`} Component={SignIn} />
-              <Route path={`/signup`} Component={SignUp} />
-              <Route path={`*`} Component={SignIn} />
-            </>
-          )}
-          {isAuthenticated && (
-            <>
-              <Route path={`/`} Component={LandingPage} />
-              <Route path={`/signin`} Component={LandingPage} />
-              <Route path={`/home`} Component={LandingPage} />
-              <Route path={`/game`} Component={Game} />
-              <Route path={`/game/minesweeper/:id?`} Component={MineSweeperGame} />
-            </>
-          )}
-          {/* <PrivateRoute
-            path="/home"
-            component={LandingPage}
-            isAuthenticated={true}
-          /> */}
-        </Routes>
+        {isLoading ? (
+          <>
+            <Box
+              display={"flex"}
+              alignItems={"center"}
+              justifyContent={"center"}
+              height={"100vh"}
+            >
+              <Spinner
+                thickness="4px"
+                speed="0.65s"
+                emptyColor="gray.200"
+                color="blue.500"
+                size="xl"
+                height={"300px"}
+                width={"300px"}
+              />
+            </Box>
+          </>
+        ) : (
+          <Routes>
+            {!isAuthenticated && (
+              <>
+                <Route path={`/`} element={<SignIn />} />
+                <Route path={`/signin`} element={<SignIn />} />
+                <Route path={`/signup`} element={<SignUp />} />
+                <Route path={`*`} element={<SignIn />} />
+              </>
+            )}
+            {isAuthenticated && (
+              <>
+                <Route path={`/`} element={<LandingPage />} />
+                <Route path={`/signin`} element={<LandingPage />} />
+                <Route path={`/home`} element={<LandingPage />} />
+                <Route path={`/game/tictactoe/:id?`} element={<Game />} />
+                <Route
+                  path={`/game/minesweeper/:id?`}
+                  element={<MineSweeperGame />}
+                />
+              </>
+            )}
+          </Routes>
+        )}
       </main>
     </>
   );

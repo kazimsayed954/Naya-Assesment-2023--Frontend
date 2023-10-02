@@ -10,8 +10,8 @@ import { BrowserRouter as Router } from 'react-router-dom'; // Import the Browse
 
 ReactDOM.createRoot(document.getElementById("root")!).render(
   <React.StrictMode>
-    <Provider store={store}>
-      <ChakraProvider theme={theme}>
+    <Provider store={store} >
+      <ChakraProvider theme={theme} toastOptions={{ defaultOptions: { position: 'top-right' } }}>
         <Router>
         <App />
         </Router>

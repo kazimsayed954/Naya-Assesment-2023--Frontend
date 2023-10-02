@@ -25,6 +25,7 @@ const TicTacToe = () => {
   const [end, setEnd] = useState(false);
 
   useEffect(() => {
+    setName(JSON.parse(localStorage.getItem('user'))?.name??'');
     const newSocket = io(ENDPOINT);
     setSocket(newSocket);
 

@@ -1,0 +1,70 @@
+/* TicTacToe.css */
+
+.tic-tac-toe {
+    text-align: center;
+    margin: 20px auto;
+    width: 300px;
+  }
+  
+  .game-options {
+    margin-bottom: 20px;
+  }
+  
+  label {
+    display: block;
+    margin-bottom: 10px;
+    font-weight: bold;
+  }
+  
+  input {
+    width: 100%;
+    padding: 5px;
+    margin-bottom: 10px;
+  }
+  
+  .btn {
+    background-color: #007bff;
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    cursor: pointer;
+    margin-right: 10px;
+  }
+  
+  .game-status {
+    text-align: center;
+  }
+  
+  .board {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    grid-gap: 5px;
+    margin: 20px 0;
+  }
+  
+  .square {
+    width: 100px;
+    height: 100px;
+    font-size: 2em;
+    background-color: #f0f0f0;
+    border: 1px solid #ccc;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    cursor: pointer;
+  }
+  
+  .square.x {
+    color: #f00;
+  }
+  
+  .square.o {
+    color: #00f;
+  }
+  
+  .modal {
+    margin-top: 20px;
+  }
+  
+  /* Add more styles as needed */
+  

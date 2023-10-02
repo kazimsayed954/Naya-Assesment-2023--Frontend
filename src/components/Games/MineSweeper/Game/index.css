@@ -1,0 +1,41 @@
+/* Minesweeper.css */
+
+/* .mineweeper {
+  display: inline-block;
+} */
+
+.row {
+    display: flex;
+  }
+  
+  .cell {
+    width: 30px;
+    height: 30px;
+    border: 1px solid #ccc;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    cursor: pointer;
+  }
+  
+  .cell.open {
+    background-color: #ddd;
+  }
+  
+  .game-over {
+    margin-top: 20px;
+    font-size: 18px;
+    font-weight: bold;
+    color: red;
+  }
+  
+  .restart-button {
+    border-radius: 20px;
+    width: 80px;
+    height: 35px;
+    cursor: pointer;
+    align-items: center;
+    justify-content: center;
+    display: inline;
+  }
+  

@@ -30,6 +30,10 @@ const MineSweeper = () => {
     (state: any) => state.mineSweeper
   );
 
+const min = 19;
+const max = 50;
+const randomNumber = Math.floor(Math.random() * (max - min + 1)) + min;
+
   console.log(board, gameOver, score);
 
   const createBoard = (rows: number, cols: number, minesCount: number) => {
@@ -76,7 +80,7 @@ const MineSweeper = () => {
   };
 
   const handleRestartGame = () => {
-    dispatch(setBoard(createBoard(10, 10, 50)));
+    dispatch(setBoard(createBoard(10, 10, randomNumber)));
     dispatch(setScore(0));
     dispatch(setGameOver(false));
     navigate('/game/minesweeper')
@@ -97,7 +101,7 @@ const MineSweeper = () => {
 
   useEffect(() => {
     if (!params?.id) {
-      dispatch(setBoard(createBoard(10, 10, 50)));
+      dispatch(setBoard(createBoard(10, 10, randomNumber)));
     }
   }, [dispatch]);
 

@@ -4,6 +4,7 @@ import {
   Flex,
   Spinner,
   Text,
+  Tooltip,
   useColorModeValue,
 } from "@chakra-ui/react";
 import CustomCard from "../Card/index";
@@ -29,7 +30,7 @@ export default function GameStateColumn(props: {
   const params: any = useParams();
 
   useEffect(() => {
-    getAllGameState();
+    props.gametype === "minesweeper" && getAllGameState();
   }, []);
 
   const handleSaveGame = () => {
@@ -59,6 +60,10 @@ export default function GameStateColumn(props: {
   };
 
   const getAllGameState = () => {
+
+    if(savedStateList?.length >=5){
+        return ;
+    }
     setLoader(true);
     apiWithToken
       .get(`/api/v1/game/getall?gametype=${props.gametype}`)
@@ -109,23 +114,24 @@ export default function GameStateColumn(props: {
           Game State
         </Text>
 
-        <Button
-          p="0px"
-          ms="auto"
-          variant="no-hover"
-          bg="transparent"
-          onClick={() => handleSaveGame()}
-        >
-          <Text
-            fontSize="md"
-            color={brandColor}
-            fontWeight="700"
-            cursor="pointer"
-            my={{ sm: "1.5rem", lg: "0px" }}
+        <Tooltip label={"Save Game"}>
+          <Button
+            px="24px"
+            ms="auto"
+            variant="solid"
+            onClick={() => handleSaveGame()}
           >
-            Save Game
-          </Text>
-        </Button>
+            <Text
+              fontSize="md"
+              color={brandColor}
+              fontWeight="700"
+              cursor="pointer"
+              my={{ sm: "1.5rem", lg: "0px" }}
+            >
+              Save Game
+            </Text>
+          </Button>
+        </Tooltip>
       </Flex>
       {loader ? (
         <Flex alignItems={"center"} justifyContent={"center"}>
@@ -157,6 +163,14 @@ export default function GameStateColumn(props: {
             ))}
         </>
       )}
+      <Text
+        color={"red"}
+        textAlign={"center"}
+        fontSize={"sm"}
+        mt={loader ? "8px" : "0px"}
+      >
+        Note : You can only Save 5 Game
+      </Text>
     </CustomCard>
   );
 }

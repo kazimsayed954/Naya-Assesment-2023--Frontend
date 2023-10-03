@@ -1,6 +1,12 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 // Chakra imports
-import { Flex, Text, Button, useColorModeValue } from "@chakra-ui/react";
+import {
+  Flex,
+  Text,
+  Button,
+  useColorModeValue,
+  Tooltip,
+} from "@chakra-ui/react";
 import React from "react";
 
 export default function RowState(props: {
@@ -9,7 +15,7 @@ export default function RowState(props: {
   action: () => void | any;
   actionName: string;
   [x: string]: any;
-  gametype?:string;
+  gametype?: string;
   actionDelete?: any;
 }) {
   const { date, name, action, actionDelete, actionName, ...rest } = props;
@@ -18,7 +24,7 @@ export default function RowState(props: {
     const date = new Date(val);
 
     // Format the date in a readable format
-    const options:any = {
+    const options: any = {
       year: "numeric",
       month: "short",
       day: "numeric",
@@ -45,25 +51,30 @@ export default function RowState(props: {
         </Text>
       </Flex>
 
-      <Button
-        variant="action"
-        px="24px"
-        onClick={action}
-        fontSize="sm"
-        fontWeight="700"
-      >
-        {actionName}
-      </Button>
-      <Button
-        variant="action"
-        color={"red"}
-        px="24px"
-        onClick={()=>actionDelete(name)}
-        fontSize="sm"
-        fontWeight="700"
-      >
-        {"Delete"}
-      </Button>
+      <Tooltip label={"Resume Game"}>
+        <Button
+          variant="action"
+          px="24px"
+          onClick={action}
+          fontSize="sm"
+          fontWeight="700"
+        >
+          {actionName}
+        </Button>
+      </Tooltip>
+
+      <Tooltip label={"Delete Game"}>
+        <Button
+          variant="action"
+          color={"red"}
+          px="24px"
+          onClick={() => actionDelete(name)}
+          fontSize="sm"
+          fontWeight="700"
+        >
+          {"Delete"}
+        </Button>
+      </Tooltip>
     </Flex>
   );
 }

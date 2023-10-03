@@ -13,7 +13,7 @@ import "./index.css";
 
 const ENDPOINT = "http://localhost:7899";
 
-const TicTacToe = () => {
+const MuliplayerT3 = () => {
   const [socket, setSocket] = useState(null);
   const [roomId, setRoomId] = useState("");
   const [name, setName] = useState("");
@@ -23,6 +23,7 @@ const TicTacToe = () => {
   const [statusMessage, setStatusMessage] = useState("");
   const [showModal, setShowModal] = useState(false);
   const [end, setEnd] = useState(false);
+  
 
   useEffect(() => {
     setName(JSON.parse(localStorage.getItem('user'))?.name??'');
@@ -113,7 +114,10 @@ const TicTacToe = () => {
   }, [socket, name]);
 
   return (
-    <Box textAlign="center" p={4}>
+    <Box textAlign="center" p={4} 
+    mt={{ base: "5%", xl: "5%",md:'10%',sm:'15%' }}
+
+    >
       <Text fontSize="2xl">Tic-Tac-Toe</Text>
       <Stack spacing={3} mt={4} mb={4}>
         <Input
@@ -135,7 +139,7 @@ const TicTacToe = () => {
       </Stack>
       <Text fontSize="lg">Status: {statusMessage}</Text>
       <Box className="board">
-        {gameState.map((value, index) => (
+        {gameState?.map((value, index) => (
           <Button
             key={index}
             size="xl"
@@ -161,4 +165,4 @@ const TicTacToe = () => {
   );
 };
 
-export default TicTacToe;
+export default MuliplayerT3;

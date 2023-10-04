@@ -18,7 +18,6 @@ interface AuthState {
     token: null,
   };
 
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const authSlice:any = createSlice({
     name: 'auth',
     initialState,

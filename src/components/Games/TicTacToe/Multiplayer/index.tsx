@@ -1,8 +1,6 @@
-//eslint-disable @typescript-eslint/ban-ts-comment
-//@ts-nocheck
 import React, { useState, useEffect } from "react";
 import { io } from "socket.io-client";
-import { Box, Button, Input, Stack, Text, Flex, Card } from "@chakra-ui/react";
+import { Box, Button, Input, Stack, Text, Flex } from "@chakra-ui/react";
 import "./index.css";
 import { useDispatch, useSelector } from "react-redux";
 import {
@@ -31,18 +29,22 @@ const MuliplayerT3 = () => {
     statusMessage,
     showModal,
     end,
-  } = useSelector((state) => state?.tictactoe);
-  const [socket, setSocket] = useState(null);
-  const [isJoinRoomClicked, setIsJoinRoomClicked] = useState(false);
+  } = useSelector((state:any) => state?.tictactoe);
+  const [socket, setSocket] = useState<any>(null);
+  const [isJoinRoomClicked, setIsJoinRoomClicked] = useState<boolean>(false);
 
 
   useEffect(() => {
+    const userObj:any = localStorage.getItem("user");
+    const userName:any = JSON.parse(userObj)?.name ?? "";
     // setName(JSON.parse(localStorage.getItem('user'))?.name??'');
-    dispatch(setName(JSON.parse(localStorage.getItem("user"))?.name ?? ""));
+    dispatch(setName(userName));
     const newSocket = io(ENDPOINT);
     setSocket(newSocket);
 
-    return () => newSocket.disconnect();
+    return () => {
+      newSocket.disconnect()
+    };
   }, []);
 
   const handleNewGame = () => {
@@ -56,7 +58,7 @@ const MuliplayerT3 = () => {
     }
   };
 
-  const handleClick = (index) => {
+  const handleClick = (index:number) => {
     if (!gameState[index] && !end && turn) {
       socket.emit("move", { room: roomId, piece, index });
     }
@@ -81,7 +83,7 @@ const MuliplayerT3 = () => {
 
   useEffect(() => {
     if (socket) {
-      socket.on("newGameCreated", (room) => {
+      socket.on("newGameCreated", (room:string|number) => {
         setRoomId(room);
         dispatch(setRoomId(room)); // Dispatch to update roomId
       });
@@ -90,15 +92,15 @@ const MuliplayerT3 = () => {
         dispatch(setStatusMessage("Joined the room")); // Dispatch to update statusMessage
       });
 
-      socket.on("errorMessage", (message) => {
+      socket.on("errorMessage", (message:string) => {
         dispatch(setStatusMessage(message)); // Dispatch to update statusMessage
       });
 
-      socket.on("pieceAssignment", ({ piece }) => {
+      socket.on("pieceAssignment", ({ piece }:any) => {
         dispatch(setPiece(piece)); // Dispatch to update piece
       });
 
-      socket.on("starting", ({ gameState, turn }) => {
+      socket.on("starting", ({ gameState, turn }:any) => {
         dispatch(setGameState([...gameState])); // Dispatch to update gameState
         dispatch(setTurn(turn)); // Dispatch to update turn
         dispatch(setStatusMessage(`${name}'s Turn`)); // Dispatch to update statusMessage
@@ -106,13 +108,13 @@ const MuliplayerT3 = () => {
         dispatch(setEnd(false)); // Dispatch to update end
       });
 
-      socket.on("update", ({ gameState, turn }) => {
+      socket.on("update", ({ gameState, turn }:any) => {
         dispatch(setGameState([...gameState])); // Dispatch to update gameState
         dispatch(setTurn(turn)); // Dispatch to update turn
         dispatch(setStatusMessage(turn ? "Your Turn" : `${name}'s Turn`)); // Dispatch to update statusMessage
       });
 
-      socket.on("winner", ({ gameState, id }) => {
+      socket.on("winner", ({ gameState, id }:any) => {
         dispatch(setGameState([...gameState])); // Dispatch to update gameState
         if (socket.id === id) {
           dispatch(setStatusMessage("You Win")); // Dispatch to update statusMessage
@@ -123,14 +125,14 @@ const MuliplayerT3 = () => {
         dispatch(setEnd(true)); // Dispatch to update end
       });
 
-      socket.on("draw", ({ gameState }) => {
+      socket.on("draw", ({ gameState }:any) => {
         dispatch(setGameState([...gameState])); // Dispatch to update gameState
         dispatch(setStatusMessage("Draw")); // Dispatch to update statusMessage
         dispatch(setShowModal(true)); // Dispatch to update showModal
         dispatch(setEnd(true)); // Dispatch to update end
       });
 
-      socket.on("restart", ({ gameState, turn }) => {
+      socket.on("restart", ({ gameState, turn }:any) => {
         dispatch(setGameState([...gameState])); // Dispatch to update gameState
         dispatch(setTurn(turn)); // Dispatch to update turn
         dispatch(setStatusMessage(turn ? "Your Turn" : `${name}'s Turn`)); // Dispatch to update statusMessage
@@ -203,9 +205,9 @@ const MuliplayerT3 = () => {
         )}
         <Flex justifyContent="center" alignItems="center">
           <Box className="board">
-            {gameState?.map((value, index) => (
+            {gameState?.map((value:any, index:number) => (
               <Button
-                key={index}
+                key={index**3+2}
                 size="xl"
                 fontSize="3xl"
                 style={cellStyle}
@@ -213,7 +215,6 @@ const MuliplayerT3 = () => {
                   value === "X" ? "x" : value === "O" ? "o" : ""
                 }`}
                 onClick={() => handleClick(index)}
-                // isDisabled={value || !turn || end}
                 isDisabled={value !== null || !turn || end}
               >
                 {value}

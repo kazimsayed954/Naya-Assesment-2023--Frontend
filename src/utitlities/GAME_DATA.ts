@@ -6,6 +6,8 @@ import Avatar3 from "../assets/images/avatars/avatar3.png";
 import Avatar4 from "../assets/images/avatars/avatar4.png";
 import T3 from "../assets/images/games/T3.png";
 import MineSweeper from "../assets/images/games/minesweeper.png";
+import T3VsComputer from "../assets/images/games/T3vscomputer.png";
+
 
 function shuffleArray(array) {
   for (let i = array.length - 1; i > 0; i--) {
@@ -18,7 +20,7 @@ function shuffleArray(array) {
 
 const gameData = [
 {
-    name:'TicTacToe',
+    name:'TicTacToe (Multiplayer)',
     subtitle:"By Naya Game Studio",
     players:shuffleArray([
         Avatar1,
@@ -31,12 +33,30 @@ const gameData = [
         Avatar4,
       ]),
       image:T3,
-      path:"/game/tictactoe",
+      path:"/game/tictactoe/multiplayer",
       highestscore:3
 
 },
 {
-    name:'MineSweeper',
+  name:'TicTacToe (Vs Computer)',
+  subtitle:"By Naya Game Studio",
+  players:shuffleArray([
+      Avatar1,
+      Avatar2,
+      Avatar3,
+      Avatar4,
+      Avatar1,
+      Avatar2,
+      Avatar3,
+      Avatar4,
+    ]),
+    image:T3VsComputer,
+    path:"/game/tictactoe/computer",
+    highestscore:'NA'
+
+},
+{
+    name:'MineSweeper (Single Player)',
     subtitle:"By Naya Game Studio",
     players:shuffleArray([
         Avatar1,

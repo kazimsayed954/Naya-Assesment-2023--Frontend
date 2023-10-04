@@ -1,4 +1,3 @@
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   import { createSlice } from "@reduxjs/toolkit";
 
   const initialState = {

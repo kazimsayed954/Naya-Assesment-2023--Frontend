@@ -1,4 +1,3 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
 import {
   Button,
   Flex,
@@ -88,7 +87,7 @@ export default function GameStateColumn(props: {
           getAllGameState();
         }
       })
-      .catch((err) => {});
+      .catch((err:any) => {throw new err});
   };
 
   const handleDeleteState = (id: any) => {
@@ -99,7 +98,7 @@ export default function GameStateColumn(props: {
           getAllGameState();
         }
       })
-      .catch((err) => {});
+      .catch((err) => {throw new err});
   };
 
   return (
@@ -169,7 +168,7 @@ export default function GameStateColumn(props: {
         fontSize={"sm"}
         mt={loader ? "8px" : "0px"}
       >
-        Note : You can only Save 5 Game
+        Note : You can only Save 5 states per game
       </Text>
     </CustomCard>
   );

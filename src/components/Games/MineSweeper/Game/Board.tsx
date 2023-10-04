@@ -1,5 +1,4 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
-import React, { useEffect } from "react";
+import  { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import {
   Box,
@@ -17,7 +16,6 @@ import {
   setGameOver,
 } from "../../../../../slice/minesweeperSlice";
 import "../Game/index.css";
-import CustomCard from "../../../Card";
 import { apiWithToken } from "../../../../utitlities/API";
 import { useNavigate, useParams } from "react-router-dom";
 const MineSweeper = () => {
@@ -96,7 +94,9 @@ const randomNumber = Math.floor(Math.random() * (max - min + 1)) + min;
           dispatch(setScore(res?.data?.score));
         }
       })
-      .catch((err) => {});
+      .catch((err:any) => { 
+        throw new  err;
+      });
   };
 
   useEffect(() => {
@@ -109,6 +109,7 @@ const randomNumber = Math.floor(Math.random() * (max - min + 1)) + min;
     if(params?.id){
       getGameStateById(params?.id);
     }
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   },[params?.id])
 
   return (

@@ -1,7 +1,6 @@
 import { Route, Routes } from "react-router-dom";
 import SignIn from "./components/SignIn";
 import SignUp from "./components/SignUp";
-import PageNotFound from "./components/404";
 
 import "./App.css";
 import LandingPage from "./components/LandingPage";
@@ -11,19 +10,19 @@ import { useSelector } from "react-redux";
 import { useEffect, useState } from "react";
 import MineSweeperGame from "../src/components/Games/MineSweeper/index";
 import { Box, Spinner } from "@chakra-ui/react";
+
 // import PrivateRoute from "../HOC/PrivateRoute";
 function App() {
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const authState = useSelector((state: any) => state.auth);
   const [isAuthenticated, setIsAuthenticated] = useState(false);
   const [isLoading, setIsLoading] = useState(true); // Add loading state
-
   useEffect(() => {
+    const tokenLength = localStorage?.getItem("id-token")?.length ?? 0;
     if (
       (authState?.isAuthenticated &&
         Object.keys(authState?.user ?? {})?.length > 1 &&
         authState?.token) ||
-      localStorage?.getItem("id-token")?.length > 25
+      tokenLength > 150
     ) {
       setIsAuthenticated(true);
     }
@@ -66,7 +65,8 @@ function App() {
                 <Route path={`/`} element={<LandingPage />} />
                 <Route path={`/signin`} element={<LandingPage />} />
                 <Route path={`/home`} element={<LandingPage />} />
-                <Route path={`/game/tictactoe/:id?`} element={<T3 />} />
+                <Route path={`/game/tictactoe/multiplayer`} element={<T3 />} />
+                <Route path={`/game/tictactoe/computer/:id?`} element={<T3/>} />
                 <Route
                   path={`/game/minesweeper/:id?`}
                   element={<MineSweeperGame />}

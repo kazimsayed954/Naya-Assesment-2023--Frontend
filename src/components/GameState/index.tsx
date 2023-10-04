@@ -5,6 +5,7 @@ import {
   Text,
   Tooltip,
   useColorModeValue,
+  useToast,
 } from "@chakra-ui/react";
 import CustomCard from "../Card/index";
 import React, { useEffect, useState } from "react";
@@ -20,19 +21,32 @@ export default function GameStateColumn(props: {
   const { ...rest } = props;
   const textColor = useColorModeValue("secondaryGray.900", "white");
   const brandColor = useColorModeValue("brand.500", "white");
-  const { board, gameOver, score } = useSelector(
-    (state: any) => state.mineSweeper
-  );
+  
+  const { board: mineSweeperBoard, gameOver: mineSweeperGameOver, score: mineSweeperScore } = useSelector((state:any) => state.mineSweeper);
+
+  const { playerTurn: ticTacToePlayerTurn, winner: ticTacToeWinner, board: ticTacToeBoard } = useSelector((state:any) => state.tictactoeVsComputer);
+
   const [savedStateList, setSavedStateList] = useState([]);
   const [loader, setLoader] = useState(false);
   const navigate = useNavigate();
+  const toast = useToast();
   const params: any = useParams();
-
   useEffect(() => {
-    props.gametype === "minesweeper" && getAllGameState();
+    props.gametype && getAllGameState();
   }, []);
 
   const handleSaveGame = () => {
+    if(savedStateList?.length >=5) {
+        toast.closeAll();
+        toast({
+          title: ' You can only Save 5 states per game.',
+          description: "You can delete a previous game and then try to save.",
+          status: 'info',
+          duration: 4000,
+          isClosable: true,
+        })
+      return;
+    }
     if (
       params?.id &&
       savedStateList?.some((item: any) => item?._id === params?.id)
@@ -40,10 +54,11 @@ export default function GameStateColumn(props: {
       hanldeUpdateGameState(params?.id);
     } else {
       const body = {
-        board,
-        gameOver,
-        score,
+        board:props.gametype === "minesweeper"?mineSweeperBoard:ticTacToeBoard,
+        gameOver:mineSweeperGameOver,
+        score:mineSweeperScore,
         gameType: props.gametype,
+        playerTurn: ticTacToePlayerTurn, winner: ticTacToeWinner
       };
       apiWithToken
         .post(`/api/v1/game/save`, body)
@@ -59,9 +74,8 @@ export default function GameStateColumn(props: {
   };
 
   const getAllGameState = () => {
-
-    if(savedStateList?.length >=5){
-        return ;
+    if (savedStateList?.length >= 5) {
+      return;
     }
     setLoader(true);
     apiWithToken
@@ -75,10 +89,11 @@ export default function GameStateColumn(props: {
 
   const hanldeUpdateGameState = (id: any) => {
     const body = {
-      board,
-      gameOver,
-      score,
-      gameType: props.gametype,
+        board:props.gametype === "minesweeper"? mineSweeperBoard:ticTacToeBoard,
+        gameOver:mineSweeperGameOver,
+        score:mineSweeperScore,
+        gameType: props.gametype,
+        playerTurn: ticTacToePlayerTurn, winner: ticTacToeWinner,
     };
     apiWithToken
       .put(`/api/v1/game/update/${id}`, body)
@@ -87,10 +102,13 @@ export default function GameStateColumn(props: {
           getAllGameState();
         }
       })
-      .catch((err:any) => {throw new err});
+      .catch((err: any) => {
+        console.log(err);
+      });
   };
 
   const handleDeleteState = (id: any) => {
+    setLoader(true)
     apiWithToken
       .delete(`/api/v1/game/delete/${id}?gametype=${props?.gametype}`)
       .then((res) => {
@@ -98,8 +116,13 @@ export default function GameStateColumn(props: {
           getAllGameState();
         }
       })
-      .catch((err) => {throw new err});
+      .catch((err) => {
+        console.log(err);
+      })
+      .finally(()=>setLoader(false));
   };
+
+  const navigateUrl = props.gametype === "minesweeper" ? '/game/minesweeper':  props.gametype === "tictactoe" ? '/game/tictactoe/computer': '/home'
 
   return (
     <CustomCard flexDirection="column" w="100%" p="34px" {...rest}>
@@ -153,7 +176,7 @@ export default function GameStateColumn(props: {
                   mb="43px"
                   name={item?._id}
                   date={item?.updatedAt}
-                  action={() => navigate(`/game/minesweeper/${item?._id}`)}
+                  action={() => navigate(navigateUrl +"/"+ item?._id)}
                   actionName="Resume"
                   gametype={props.gametype}
                   actionDelete={handleDeleteState}

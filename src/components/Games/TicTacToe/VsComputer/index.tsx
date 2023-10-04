@@ -13,11 +13,21 @@ import {
     setPlayerTurn,
     setWinner
   } from "../../../../../slice/tictactoeVsComputerSlice";
+import { apiWithToken } from "../../../../utitlities/API";
+import { useParams } from "react-router-dom";
 
 const TicTacToeVsComputer = () => {
   const initialBoard = Array(9).fill(null);
   const { playerTurn,winner,board } = useSelector((state:any)=>state.tictactoeVsComputer);
   const dispatch = useDispatch();
+  const params: any = useParams();
+
+  useEffect(()=>{
+    if(params?.id){
+      getGameStateById(params?.id);
+    }
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  },[params?.id])
 
   useEffect(() => {
     if (!playerTurn && !winner) {
@@ -164,6 +174,20 @@ const TicTacToeVsComputer = () => {
     }
   };
 
+  const getGameStateById = (id: any) => {
+    apiWithToken
+      .get(`/api/v1/game/getbyid/${id}?gametype=tictactoe`)
+      .then((res) => {
+        if (res?.status === 200) {
+          dispatch(setBoard(res?.data?.board));
+          dispatch(setPlayerTurn(res?.data?.playerTurn));
+          dispatch(setWinner(res?.data?.winner));
+        }
+      })
+      .catch((err:any) => { 
+        throw new  err;
+      });
+  };
   
 
   return (

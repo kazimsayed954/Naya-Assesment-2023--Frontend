@@ -23,7 +23,7 @@ const TicTacToe = () => {
                 }
             </Box>
             <Box width={{ base: "30%" }}>
-              <GameStateColumn gametype={"tictactoe"} />
+              <GameStateColumn gametype={isVsComputer ? "tictactoe" : ""} />
             </Box>
           </Flex>
         </Box>

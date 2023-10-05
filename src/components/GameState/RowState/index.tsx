@@ -1,4 +1,3 @@
-// Chakra imports
 import { ArrowRightIcon, DeleteIcon } from "@chakra-ui/icons";
 import {
   Flex,
@@ -21,7 +20,6 @@ export default function RowState(props: {
   const dateFormatter = (val: string) => {
     const date = new Date(val);
 
-    // Format the date in a readable format
     const options: any = {
       year: "numeric",
       month: "short",

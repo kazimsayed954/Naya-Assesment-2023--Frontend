@@ -1,20 +1,13 @@
 import { useEffect, useState, lazy, Suspense } from "react";
 import { Route, Routes } from "react-router-dom";
+import { useSelector } from "react-redux";
+import { Box, Spinner } from "@chakra-ui/react";
+
 import SignIn from "./components/SignIn";
 import SignUp from "./components/SignUp";
+import LandingPage from "./components/LandingPage";
 
 import "./App.css";
-import LandingPage from "./components/LandingPage";
-// import AdminNavbar from "./components/NavBar";
-// import T3 from "../src/components/Games/TicTacToe/index";
-import { useSelector } from "react-redux";
-// import MineSweeperGame from "../src/components/Games/MineSweeper/index";
-import { Box, Spinner } from "@chakra-ui/react";
-// import PrivateRoute from "../HOC/PrivateRoute";
-
-// const SignIn = lazy(() => import("./components/SignIn"));
-// const SignUp = lazy(() => import("./components/SignUp"));
-// const LandingPage = lazy(() => import("./components/LandingPage"));
 const T3 = lazy(() => import("../src/components/Games/TicTacToe/index"));
 const MineSweeperGame = lazy(
   () => import("../src/components/Games/MineSweeper/index")

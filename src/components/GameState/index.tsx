@@ -67,6 +67,13 @@ export default function GameStateColumn(props: {
     }
   };
 
+  const navigateUrl =
+    props.gametype === "minesweeper"
+      ? "/game/minesweeper"
+      : props.gametype === "tictactoe"
+      ? "/game/tictactoe/computer"
+      : "/home";
+
   const handleSaveGame = () => {
     if (savedStateList?.length >= 5) {
       toast.closeAll();
@@ -163,6 +170,9 @@ export default function GameStateColumn(props: {
       .then((res) => {
         if (res?.status === 200) {
           getAllGameState();
+          if(params?.id){
+            navigate(navigateUrl); 
+          }
         }
       })
       .catch((err) => {
@@ -174,12 +184,7 @@ export default function GameStateColumn(props: {
       });
   };
 
-  const navigateUrl =
-    props.gametype === "minesweeper"
-      ? "/game/minesweeper"
-      : props.gametype === "tictactoe"
-      ? "/game/tictactoe/computer"
-      : "/home";
+  
 
   return (
     <CustomCard flexDirection="column" w="100%" p="34px" {...rest}>
@@ -202,6 +207,7 @@ export default function GameStateColumn(props: {
                 variant="solid"
                 isLoading={loader}
                 onClick={() => handleSaveGame()}
+                isDisabled={loader}
               >
                 <Text
                   fontSize="md"
@@ -209,6 +215,7 @@ export default function GameStateColumn(props: {
                   fontWeight="700"
                   cursor="pointer"
                   my={{ sm: "1.5rem", lg: "0px" }}
+                  
                 >
                   Save Game
                 </Text>
@@ -228,7 +235,7 @@ export default function GameStateColumn(props: {
             </Flex>
           ) : (
             <>
-              {savedStateList?.length > 0 ?
+              {savedStateList?.length > 0 ? (
                 savedStateList?.map((item: any) => (
                   <>
                     <RowState
@@ -245,8 +252,9 @@ export default function GameStateColumn(props: {
                     />
                   </>
                 ))
-                :<Text textAlign={'center'}>No Saved Game Found</Text>
-              }
+              ) : (
+                <Text textAlign={"center"}>No Saved Game Found</Text>
+              )}
             </>
           )}
           <Text

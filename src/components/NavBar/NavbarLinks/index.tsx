@@ -18,10 +18,6 @@ import { logoutSuccess } from "../../../../slice/auth";
 import { useNavigate } from "react-router-dom";
 // Custom Components
 
-// Assets
-// import navImage from 'assets/img/layout/Navbar.png';
-// import { MdNotificationsNone, MdInfoOutline } from 'react-icons/md';
-// import { IoMdMoon, IoMdSunny } from 'react-icons/io';
 
 export default function NavbarLinks(props: { secondary: boolean }) {
   const { secondary } = props;
@@ -40,8 +36,9 @@ export default function NavbarLinks(props: { secondary: boolean }) {
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const handleLogOut = () => {
-    localStorage.clear();
     dispatch(logoutSuccess());
+    localStorage.removeItem('id-token');
+    localStorage.removeItem('user');
     navigate("/signin");
     window.location.reload();
   };

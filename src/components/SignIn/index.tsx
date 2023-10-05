@@ -72,6 +72,7 @@ function SignIn() {
           title: response.data?.message,
           status: "success",
           isClosable: true,
+          duration:1000,
         });
         localStorage.setItem("id-token", JSON.stringify(response?.data?.token));
         localStorage.setItem("user", JSON.stringify(response?.data?.user));
@@ -82,7 +83,7 @@ function SignIn() {
           })
         );
         navigate("/home");
-        window.location.reload();
+        // window.location.reload();
       }
 
       // Reset the form data

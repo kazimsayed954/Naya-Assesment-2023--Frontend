@@ -11,7 +11,10 @@ import { useState, useEffect } from "react";
 import NavbarLinks from "./NavbarLinks";
 import { useNavigate } from "react-router-dom";
 import { ArrowBackIcon } from "@chakra-ui/icons";
-
+import { SearchBar } from "../Searchbar";
+import gameData from "../../utitlities/GAME_DATA";
+import { useDispatch } from "react-redux";
+import { setGameList } from "../../../slice/gameList";
 export default function AdminNavbar(props: {
   secondary: boolean;
   brandText: string;
@@ -20,6 +23,7 @@ export default function AdminNavbar(props: {
   onOpen: (...args: any[]) => any;
 }) {
   const [_scrolled, setScrolled] = useState(false);
+  const dispatch = useDispatch();
 
   useEffect(() => {
     window.addEventListener("scroll", changeNavbar);
@@ -31,6 +35,9 @@ export default function AdminNavbar(props: {
 
   const { secondary, brandText } = props;
   const isHome = window?.location?.href?.includes("home");
+  const [searchQuery, setSearchQuery] = useState("");
+  const delay = 500;
+  let searchTimer:number;
 
   // Here are all the props that may change depending on navbar's type or state.(secondary, variant, scrolled)
   let mainText = useColorModeValue("navy.700", "white");
@@ -46,6 +53,12 @@ export default function AdminNavbar(props: {
   let secondaryMargin = "0px";
   let paddingX = "15px";
   let gap = "0px";
+  let menuBg = useColorModeValue('white', 'navy.800');
+  const shadow = useColorModeValue(
+    "14px 17px 40px 4px rgba(112, 144, 176, 0.18)",
+    "14px 17px 40px 4px rgba(112, 144, 176, 0.06)"
+  );
+
   const changeNavbar = () => {
     if (window.scrollY > 1) {
       setScrolled(true);
@@ -53,6 +66,23 @@ export default function AdminNavbar(props: {
       setScrolled(false);
     }
   };
+
+  const handleSearch = (query: string) => {
+    setSearchQuery(query);
+
+    clearTimeout(searchTimer);
+
+    // Start a new timer to delay the search
+    searchTimer = setTimeout(() => {
+      // Filter the game data based on the search query
+      const filteredData = gameData?.filter((game) =>
+        game.name.toLowerCase().includes(query.toLowerCase())
+      );
+
+      dispatch(setGameList(filteredData));
+    }, delay);
+  };
+
   const navigate = useNavigate();
 
   return (
@@ -136,7 +166,32 @@ export default function AdminNavbar(props: {
           </Flex>
         </Box>
         <Box ms="auto" w={{ sm: "100%", md: "unset" }}>
-          <NavbarLinks secondary={false} />
+          <Flex
+		    w={{ sm: "100%", md: "auto" }}
+			alignItems="center"
+			flexDirection="row"
+			bg={menuBg}
+			flexWrap={secondary ? { base: "wrap", md: "nowrap" } : "unset"}
+			p="10px"
+			borderRadius="30px"
+			boxShadow={shadow}
+		  >
+            {isHome && (
+              <SearchBar
+			  mt='5px'
+                mb={() => {
+                  if (secondary) {
+                    return { base: "10px", md: "unset" };
+                  }
+                  return "unset";
+                }}
+                me="10px"
+                borderRadius="30px"
+                onSearch={handleSearch}
+              />
+            )}
+            <NavbarLinks secondary={false} />
+          </Flex>
         </Box>
       </Flex>
     </Box>

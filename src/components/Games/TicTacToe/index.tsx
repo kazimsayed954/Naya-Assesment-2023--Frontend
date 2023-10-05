@@ -17,7 +17,7 @@ const TicTacToe = () => {
         flexDirection="column"
         w="100%"
         p="34px"
-        mt={{ base: isMobile ? "0" : "5%", xl: "5%", md: "10%", sm: "15%" }}
+        mt={{ base: isMobile ? "0" : "5%", xl: "5%", md: "10%", sm: "100px" }}
       >
         <Box mt={{ base: "0", md: "20px",sm:'5%' }}>
           <Flex flexDir={isMobile ? "column" : "row"}>

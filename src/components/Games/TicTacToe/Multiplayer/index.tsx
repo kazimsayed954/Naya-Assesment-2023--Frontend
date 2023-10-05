@@ -16,7 +16,7 @@ import {
 } from "../../../../../slice/tictactoeSlice";
 import CustomCard from "../../../Card";
 
-const ENDPOINT = "http://localhost:7899";
+const ENDPOINT = import.meta.env.VITE_REACT_APP_API_KEY;
 
 const MuliplayerT3 = () => {
   const dispatch = useDispatch();
@@ -206,6 +206,7 @@ const MuliplayerT3 = () => {
                 colorScheme="red"
                 onClick={handleExitRoom}
                 width={{ base: "100%", md: "240px" }}
+                isDisabled={!showModal}
               >
                 Exit Room
               </Button>
@@ -214,7 +215,7 @@ const MuliplayerT3 = () => {
         </Stack>
 
         {statusMessage && (
-          <Text fontSize="lg" mb={4}>
+          <Text fontSize="lg" mb={4} textAlign={'center'}>
             Status: {statusMessage}
           </Text>
         )}
@@ -241,10 +242,12 @@ const MuliplayerT3 = () => {
 
         {showModal && (
           <Box className="modal" mt={4}>
-            <Text fontSize="xl">{statusMessage}</Text>
+            <Text fontSize="xl" textAlign={'center'}>{statusMessage}</Text>
+            <Flex justifyContent={'center'} alignItems={'center'}>
             <Button colorScheme="blue" onClick={handlePlayAgain} mt={2}>
               Play Again
             </Button>
+            </Flex>
           </Box>
         )}
       </CustomCard>

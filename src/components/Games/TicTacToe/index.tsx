@@ -1,6 +1,5 @@
 import MultiplayerT3 from "../TicTacToe/Multiplayer/index";
 import withNavbar from "../../../../HOC/withNavbar";
-import CustomCard from "../../Card";
 import { Box, Flex, useMediaQuery } from "@chakra-ui/react";
 import GameStateColumn from "../../GameState";
 import TicTacToeVsComputer from "./VsComputer";
@@ -13,7 +12,7 @@ const TicTacToe = () => {
 
   return (
     <div>
-      <CustomCard
+      <Box
         height={"100vh"}
         flexDirection="column"
         w="100%"
@@ -35,13 +34,13 @@ const TicTacToe = () => {
               )}
             </Box>
             
-              <Box width={{ base: "100%", md: "30%" }} ml={{base:''}}>
+              <Box width={{ base: "100%", md: "30%" }} ml={isMobile ? {} :{base:'20px'}}>
                 <GameStateColumn gametype={isVsComputer ? "tictactoe" : ""} />
               </Box>
             
           </Flex>
         </Box>
-      </CustomCard>
+      </Box>
     </div>
   );
 };

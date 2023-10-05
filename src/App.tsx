@@ -34,9 +34,10 @@ function App() {
     if(isAuthenticated){
       apiWithToken?.get(`/api/v1/game/highscore/getuserhighscore`)
       .then((res:any)=>{
-        if(res?.data?.length>0){
-          res?.data?.map((item:any)=>{
-            localStorage.setItem(`${item?.userId}_${item?.gameType}_highest_score`,item?.score);
+        if(res?.data?.data?.length>0){
+          console.log("ff",res.data.data);
+          res?.data?.data?.map((item:any)=>{
+            localStorage.setItem(`${item?.userId}_${item?.gameType}_highest_score`,item?.highScore);
           })
         }
       })

@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 import { io } from "socket.io-client";
-import { Box, Button, Input, Stack, Text, Flex } from "@chakra-ui/react";
+import { Box, Button, Input, Stack, Text, Flex, Center } from "@chakra-ui/react";
 import "./index.css";
 import { useDispatch, useSelector } from "react-redux";
 import {
@@ -29,21 +29,19 @@ const MuliplayerT3 = () => {
     statusMessage,
     showModal,
     end,
-  } = useSelector((state:any) => state?.tictactoe);
+  } = useSelector((state: any) => state?.tictactoe);
   const [socket, setSocket] = useState<any>(null);
   const [isJoinRoomClicked, setIsJoinRoomClicked] = useState<boolean>(false);
 
-
   useEffect(() => {
-    const userObj:any = localStorage.getItem("user");
-    const userName:any = JSON.parse(userObj)?.name ?? "";
-    // setName(JSON.parse(localStorage.getItem('user'))?.name??'');
+    const userObj: any = localStorage.getItem("user");
+    const userName: any = JSON.parse(userObj)?.name ?? "";
     dispatch(setName(userName));
     const newSocket = io(ENDPOINT);
     setSocket(newSocket);
 
     return () => {
-      newSocket.disconnect()
+      newSocket.disconnect();
     };
   }, []);
 
@@ -58,7 +56,7 @@ const MuliplayerT3 = () => {
     }
   };
 
-  const handleClick = (index:number) => {
+  const handleClick = (index: number) => {
     if (!gameState[index] && !end && turn) {
       socket.emit("move", { room: roomId, piece, index });
     }
@@ -75,15 +73,14 @@ const MuliplayerT3 = () => {
       // Reset the room-related state values
       dispatch(setRoomId(""));
       dispatch(setStatusMessage("")); // Clear the status message
-      dispatch(setGameState(Array(9).fill(null)))
+      dispatch(setGameState(Array(9).fill(null)));
       setIsJoinRoomClicked(false); // Reset the join room button state
-      
     }
   };
 
   useEffect(() => {
     if (socket) {
-      socket.on("newGameCreated", (room:string|number) => {
+      socket.on("newGameCreated", (room: string | number) => {
         setRoomId(room);
         dispatch(setRoomId(room)); // Dispatch to update roomId
       });
@@ -92,15 +89,15 @@ const MuliplayerT3 = () => {
         dispatch(setStatusMessage("Joined the room")); // Dispatch to update statusMessage
       });
 
-      socket.on("errorMessage", (message:string) => {
+      socket.on("errorMessage", (message: string) => {
         dispatch(setStatusMessage(message)); // Dispatch to update statusMessage
       });
 
-      socket.on("pieceAssignment", ({ piece }:any) => {
+      socket.on("pieceAssignment", ({ piece }: any) => {
         dispatch(setPiece(piece)); // Dispatch to update piece
       });
 
-      socket.on("starting", ({ gameState, turn }:any) => {
+      socket.on("starting", ({ gameState, turn }: any) => {
         dispatch(setGameState([...gameState])); // Dispatch to update gameState
         dispatch(setTurn(turn)); // Dispatch to update turn
         dispatch(setStatusMessage(`${name}'s Turn`)); // Dispatch to update statusMessage
@@ -108,13 +105,15 @@ const MuliplayerT3 = () => {
         dispatch(setEnd(false)); // Dispatch to update end
       });
 
-      socket.on("update", ({ gameState, turn }:any) => {
+      socket.on("update", ({ gameState, turn }: any) => {
         dispatch(setGameState([...gameState])); // Dispatch to update gameState
         dispatch(setTurn(turn)); // Dispatch to update turn
-        dispatch(setStatusMessage(turn ? "Your Turn" : `${name}'s Turn`)); // Dispatch to update statusMessage
+        dispatch(
+          setStatusMessage(turn ? "Your Turn" : `${name}'s Turn`)
+        ); // Dispatch to update statusMessage
       });
 
-      socket.on("winner", ({ gameState, id }:any) => {
+      socket.on("winner", ({ gameState, id }: any) => {
         dispatch(setGameState([...gameState])); // Dispatch to update gameState
         if (socket.id === id) {
           dispatch(setStatusMessage("You Win")); // Dispatch to update statusMessage
@@ -125,17 +124,19 @@ const MuliplayerT3 = () => {
         dispatch(setEnd(true)); // Dispatch to update end
       });
 
-      socket.on("draw", ({ gameState }:any) => {
+      socket.on("draw", ({ gameState }: any) => {
         dispatch(setGameState([...gameState])); // Dispatch to update gameState
         dispatch(setStatusMessage("Draw")); // Dispatch to update statusMessage
         dispatch(setShowModal(true)); // Dispatch to update showModal
         dispatch(setEnd(true)); // Dispatch to update end
       });
 
-      socket.on("restart", ({ gameState, turn }:any) => {
+      socket.on("restart", ({ gameState, turn }: any) => {
         dispatch(setGameState([...gameState])); // Dispatch to update gameState
         dispatch(setTurn(turn)); // Dispatch to update turn
-        dispatch(setStatusMessage(turn ? "Your Turn" : `${name}'s Turn`)); // Dispatch to update statusMessage
+        dispatch(
+          setStatusMessage(turn ? "Your Turn" : `${name}'s Turn`)
+        ); // Dispatch to update statusMessage
         dispatch(setShowModal(false)); // Dispatch to update showModal
         dispatch(setEnd(false)); // Dispatch to update end
       });
@@ -152,62 +153,77 @@ const MuliplayerT3 = () => {
   };
 
   return (
-    <Box textAlign="center" p={4}>
-      <Text fontSize="2xl" fontWeight={"black"}>
-        Tic-Tac-Toe
-      </Text>
-
-      <Stack spacing={3} mt={4} mb={4} align="center">
-        <Flex alignItems="center" justifyContent="center" gap={4}>
-          <Input
-            placeholder="Room ID"
-            value={roomId}
-            onChange={(e) => dispatch(setRoomId(e.target.value))}
-            width="240px"
-          />
-          <Input
-            placeholder="Your Name"
-            value={name}
-            onChange={(e) => dispatch(setName(e.target.value))}
-            width="240px"
-          />
-        </Flex>
-        <Flex alignItems="center" justifyContent="center" gap={4}>
-          <Button
-            colorScheme="green"
-            onClick={handleNewGame}
-            width="240px"
-            isDisabled={isJoinRoomClicked}
-          >
-            Create Room
-          </Button>
-          <Button
-            colorScheme="blue"
-            onClick={handleJoinRoom}
-            width="240px"
-            isDisabled={isJoinRoomClicked}
-          >
-            Join Room
-          </Button>
-          {roomId && socket && statusMessage && (
-          <Button colorScheme="red" onClick={handleExitRoom} width="240px">
-            Exit Room
-          </Button>
-          )}
-        </Flex>
-      </Stack>
-
+    <Center>
       <CustomCard flexDirection="column" w="100%" p="34px">
+        <Text fontSize="2xl" fontWeight={"black"} mb={4} textAlign={'center'}>
+          Tic-Tac-Toe
+        </Text>
+
+        <Stack spacing={3} align="center" mb={4}>
+          <Flex
+            alignItems="center"
+            justifyContent="center"
+            flexDirection={{ base: "column", md: "row" }}
+            gap={4}
+          >
+            <Input
+              placeholder="Room ID"
+              value={roomId}
+              onChange={(e) => dispatch(setRoomId(e.target.value))}
+              width={{ base: "100%", md: "240px" }}
+            />
+            <Input
+              placeholder="Your Name"
+              value={name}
+              onChange={(e) => dispatch(setName(e.target.value))}
+              width={{ base: "100%", md: "240px" }}
+            />
+          </Flex>
+          <Flex
+            alignItems="center"
+            justifyContent="center"
+            flexDirection={{ base: "column", md: "row" }}
+            gap={4}
+          >
+            <Button
+              colorScheme="green"
+              onClick={handleNewGame}
+              width={{ base: "100%", md: "240px" }}
+              isDisabled={isJoinRoomClicked}
+            >
+              Create Room
+            </Button>
+            <Button
+              colorScheme="blue"
+              onClick={handleJoinRoom}
+              width={{ base: "100%", md: "240px" }}
+              isDisabled={isJoinRoomClicked}
+            >
+              Join Room
+            </Button>
+            {roomId && socket && statusMessage && (
+              <Button
+                colorScheme="red"
+                onClick={handleExitRoom}
+                width={{ base: "100%", md: "240px" }}
+              >
+                Exit Room
+              </Button>
+            )}
+          </Flex>
+        </Stack>
+
         {statusMessage && (
-          <Text fontSize="lg" mb={"20px"}>
+          <Text fontSize="lg" mb={4}>
             Status: {statusMessage}
           </Text>
         )}
+
         <Flex justifyContent="center" alignItems="center">
           <Box className="board">
-            {gameState?.map((value:any, index:number) => (
+            {gameState?.map((value: any, index: number) => (
               <Button
-                key={index**3+2}
+                key={index ** 3 + 2}
                 size="xl"
                 fontSize="3xl"
                 style={cellStyle}
@@ -232,7 +248,7 @@ const MuliplayerT3 = () => {
           </Box>
         )}
       </CustomCard>
-    </Box>
+    </Center>
   );
 };
 

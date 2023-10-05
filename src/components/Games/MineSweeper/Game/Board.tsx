@@ -18,6 +18,7 @@ import {
 import "../Game/index.css";
 import { apiWithToken } from "../../../../utitlities/API";
 import { useNavigate, useParams } from "react-router-dom";
+import CustomCard from "../../../Card";
 const MineSweeper = () => {
   const textColor = useColorModeValue("secondaryGray.900", "white");
   const localStorage: any = window?.localStorage;
@@ -136,69 +137,86 @@ const MineSweeper = () => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [params?.id]);
 
+  // Responsive cell size adjustments
+  const cellSize = {
+    base: "40px", // Adjust this for smaller screens
+    sm: "20px",
+    md: "40px",
+    lg: "50px",
+    xl: "60px",
+  };
+
   return (
     <>
-      <Center>
-        <Box className="minesweeper">
-          <Text
-            color={textColor}
-            fontSize="xl"
-            fontWeight="700"
-            lineHeight="100%"
-            textAlign={"center"}
-            mb={"20px"}
-          >
-            MineSweeper
-          </Text>
-          <Grid templateColumns={`repeat(10, 1fr)`} gap={1} alignItems="center">
-            {board?.map((row: any, rowIndex: number) =>
-              row.map((cell: any, colIndex: number) => (
-                <GridItem
-                  key={colIndex * (2 + 43)}
-                  className={`cell ${cell.isOpen ? "open" : ""}`}
-                  onClick={() => handleCellClick(rowIndex, colIndex)}
-                  p="2"
-                  textAlign="center"
-                  border="1px solid gray"
-                  cursor="pointer"
-                  bgColor={cell.isOpen ? "gray.200" : "gray.100"}
-                  width={"50px"}
-                  height={"50px"}
-                  borderRadius={"5px"}
+      <CustomCard flexDirection="column" w="100%" p="34px">
+        <Center>
+          <Box className="minesweeper">
+            <Text
+              color={textColor}
+              fontSize="xl"
+              fontWeight="700"
+              lineHeight="100%"
+              textAlign={"center"}
+              mb={"20px"}
+            >
+              MineSweeper
+            </Text>
+            <Grid
+              templateColumns={`repeat(10, 1fr)`}
+              gap={1}
+              alignItems="center"
+            >
+              {board?.map((row: any, rowIndex: number) =>
+                row.map((cell: any, colIndex: number) => (
+                  <GridItem
+                    key={colIndex * (2 + 43)}
+                    className={`cell ${cell.isOpen ? "open" : ""}`}
+                    onClick={() => handleCellClick(rowIndex, colIndex)}
+                    p="2"
+                    textAlign="center"
+                    border="1px solid gray"
+                    cursor="pointer"
+                    bgColor={cell.isOpen ? "gray.200" : "gray.100"}
+                    // width={"50px"}
+                    // height={"50px"}
+                    borderRadius={"5px"}
+                    width={cellSize} // Responsive cell size
+                    height={cellSize} // Responsive cell size
+                  >
+                    {cell.isOpen ? (cell.isMine ? "💣" : "1") : ""}
+                  </GridItem>
+                ))
+              )}
+            </Grid>
+            {gameOver && (
+              <>
+                <Flex
+                  direction={"column"}
+                  alignItems="center"
+                  justifyContent="center"
+                  mb={"20px"}
                 >
-                  {cell.isOpen ? (cell.isMine ? "💣" : "1") : ""}
-                </GridItem>
-              ))
+                  <Text className="game-over" mt="2" textAlign={"center"}>
+                    Game Over! Score: {score}
+                  </Text>
+                  <Text mt="2" textAlign={"center"} color={"green"}>
+                    Highest Score: {highestScore}
+                  </Text>
+                  <Button
+                    variant={"outline"}
+                    mt="2"
+                    onClick={handleRestartGame}
+                    alignItems={"center"}
+                    justifyContent={"center"}
+                  >
+                    Restart Game
+                  </Button>
+                </Flex>
+              </>
             )}
-          </Grid>
-          {gameOver && (
-            <>
-              <Flex
-                direction={"column"}
-                alignItems="center"
-                justifyContent="center"
-                mb={"20px"}
-              >
-                <Text className="game-over" mt="2" textAlign={"center"}>
-                  Game Over! Score: {score}
-                </Text>
-                <Text mt="2" textAlign={"center"} color={"green"}>
-                  Highest Score: {highestScore}
-                </Text>
-                <Button
-                  variant={"outline"}
-                  mt="2"
-                  onClick={handleRestartGame}
-                  alignItems={"center"}
-                  justifyContent={"center"}
-                >
-                  Restart Game
-                </Button>
-              </Flex>
-            </>
-          )}
-        </Box>
-      </Center>
+          </Box>
+        </Center>
+      </CustomCard>
     </>
   );
 };

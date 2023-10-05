@@ -200,6 +200,7 @@ export default function GameStateColumn(props: {
                 px="24px"
                 ms="auto"
                 variant="solid"
+                isLoading={loader}
                 onClick={() => handleSaveGame()}
               >
                 <Text
@@ -244,7 +245,7 @@ export default function GameStateColumn(props: {
                     />
                   </>
                 ))
-                :<Text textAlign={'center'}>No Save Game Found</Text>
+                :<Text textAlign={'center'}>No Saved Game Found</Text>
               }
             </>
           )}
@@ -262,7 +263,7 @@ export default function GameStateColumn(props: {
           <Alert status="info" borderRadius={"20px"}>
             <AlertIcon />
             <AlertDescription>
-              Saving Game State feature is not available for this mode!!
+              Saving Game State feature is not available for this mode !!
             </AlertDescription>
           </Alert>
         </>

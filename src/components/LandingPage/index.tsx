@@ -1,6 +1,5 @@
-import React from "react";
 import GameCard from "../GameCard";
-import { SimpleGrid, Box, Center } from "@chakra-ui/react";
+import { SimpleGrid, Box, Center, Flex } from "@chakra-ui/react";
 import withNavbar from "../../../HOC/withNavbar";
 import gameData from "../../utitlities/GAME_DATA";
 
@@ -8,6 +7,8 @@ const LandingPage = () => {
   return (
     <Box mt={"10%"}>
       <Center>
+        <Flex>
+
         <SimpleGrid columns={{ base: 1, md: 2, xl: 4 }} gap="20px">
           {gameData?.map((game, index) => (
             <GameCard
@@ -17,10 +18,11 @@ const LandingPage = () => {
               image={game?.image}
               path={game?.path}
               highestscore={game?.highestscore}
-              key={index ** 2 + 5}
+              key={index ** 2 + 5+"0"}
             />
           ))}
         </SimpleGrid>
+        </Flex>
       </Center>
     </Box>
   );

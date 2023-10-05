@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
 import { mode } from '@chakra-ui/theme-tools';
 export const inputStyles = {
 	components: {
@@ -181,17 +182,18 @@ export const inputStyles = {
 						_placeholder: { color: 'secondaryGray.600' }
 					}
 				}),
-				authSecondary: (props: any) => ({
+				authSecondary: (_props: any) => ({
 					field: {
 						bg: 'transparent',
 						border: '1px solid',
-
+						
 						borderColor: 'secondaryGray.100',
 						borderRadius: '16px',
 						_placeholder: { color: 'secondaryGray.600' }
 					}
+					
 				}),
-				search: (props: any) => ({
+				search: (_props: any) => ({
 					field: {
 						border: 'none',
 						py: '11px',

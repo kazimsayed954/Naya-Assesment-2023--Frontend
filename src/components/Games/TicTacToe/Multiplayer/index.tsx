@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import { useState, useEffect } from "react";
 import { io } from "socket.io-client";
 import { Box, Button, Input, Stack, Text, Flex } from "@chakra-ui/react";
 import "./index.css";
@@ -231,7 +231,6 @@ const MuliplayerT3 = () => {
             </Button>
           </Box>
         )}
-        {/* </Card> */}
       </CustomCard>
     </Box>
   );

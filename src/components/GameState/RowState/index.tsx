@@ -1,24 +1,22 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
 // Chakra imports
+import { ArrowRightIcon, DeleteIcon } from "@chakra-ui/icons";
 import {
   Flex,
   Text,
-  Button,
   useColorModeValue,
   Tooltip,
+  IconButton,
 } from "@chakra-ui/react";
-import React from "react";
 
 export default function RowState(props: {
   date: string;
   name: string;
   action: () => void | any;
-  actionName: string;
   [x: string]: any;
   gametype?: string;
   actionDelete?: any;
 }) {
-  const { date, name, action, actionDelete, actionName, ...rest } = props;
+  const { date, name, action, actionDelete, ...rest } = props;
 
   const dateFormatter = (val: string) => {
     const date = new Date(val);
@@ -52,28 +50,27 @@ export default function RowState(props: {
       </Flex>
 
       <Tooltip label={"Resume Game"}>
-        <Button
-          variant="action"
+        <IconButton
+          aria-label="resume"
           px="24px"
           onClick={action}
           fontSize="sm"
           fontWeight="700"
         >
-          {actionName}
-        </Button>
+          <ArrowRightIcon />
+        </IconButton>
       </Tooltip>
-
       <Tooltip label={"Delete Game"}>
-        <Button
-          variant="action"
+        <IconButton
+          aria-label="delete"
           color={"red"}
           px="24px"
           onClick={() => actionDelete(name)}
           fontSize="sm"
           fontWeight="700"
         >
-          {"Delete"}
-        </Button>
+          <DeleteIcon />
+        </IconButton>
       </Tooltip>
     </Flex>
   );

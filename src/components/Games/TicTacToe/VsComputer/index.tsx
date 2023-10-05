@@ -1,39 +1,35 @@
-import React, { useEffect } from "react";
-import {
-  Box,
-  Button,
-  Text,
-  SimpleGrid,
-  Center,
-} from "@chakra-ui/react";
+import { useEffect } from "react";
+import { Box, Button, Text, Center, Flex } from "@chakra-ui/react";
 import CustomCard from "../../../Card";
 import { useDispatch, useSelector } from "react-redux";
 import {
-    setBoard,
-    setPlayerTurn,
-    setWinner
-  } from "../../../../../slice/tictactoeVsComputerSlice";
+  setBoard,
+  setPlayerTurn,
+  setWinner,
+} from "../../../../../slice/tictactoeVsComputerSlice";
 import { apiWithToken } from "../../../../utitlities/API";
 import { useParams } from "react-router-dom";
 
 const TicTacToeVsComputer = () => {
   const initialBoard = Array(9).fill(null);
-  const { playerTurn,winner,board } = useSelector((state:any)=>state.tictactoeVsComputer);
+  const { playerTurn, winner, board } = useSelector(
+    (state: any) => state.tictactoeVsComputer
+  );
   const dispatch = useDispatch();
   const params: any = useParams();
 
-  useEffect(()=>{
-    if(params?.id){
+  useEffect(() => {
+    if (params?.id) {
       getGameStateById(params?.id);
     }
-  // eslint-disable-next-line react-hooks/exhaustive-deps
-  },[params?.id])
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [params?.id]);
 
   useEffect(() => {
     if (!playerTurn && !winner) {
       // Computer's turn
       setTimeout(() => {
-        const bestMove:number|any = findBestMove(board);
+        const bestMove: number | any = findBestMove(board);
         if (bestMove !== -1) {
           const newBoard = [...board];
           newBoard[bestMove] = "O";
@@ -52,7 +48,7 @@ const TicTacToeVsComputer = () => {
     }
   }, [board]);
 
-  const checkWinner = (squares:any) => {
+  const checkWinner = (squares: any) => {
     const lines = [
       [0, 1, 2], // Top row
       [3, 4, 5], // Middle row
@@ -66,7 +62,11 @@ const TicTacToeVsComputer = () => {
 
     for (let i = 0; i < lines.length; i++) {
       const [a, b, c] = lines[i];
-      if (squares[a] && squares[a] === squares[b] && squares[a] === squares[c]) {
+      if (
+        squares[a] &&
+        squares[a] === squares[b] &&
+        squares[a] === squares[c]
+      ) {
         return squares[a];
       }
     }
@@ -78,8 +78,8 @@ const TicTacToeVsComputer = () => {
     return null;
   };
 
-  const findBestMove = (squares:any) => {
-    if(checkWinner(squares)) return
+  const findBestMove = (squares: any) => {
+    if (checkWinner(squares)) return;
     // Check if the computer can win in the next move
     for (let i = 0; i < 9; i++) {
       if (squares[i] === null) {
@@ -128,7 +128,7 @@ const TicTacToeVsComputer = () => {
     return -1; // No good move found
   };
 
-  const handleClick = (index:number) => {
+  const handleClick = (index: number) => {
     if (board[index] || winner) return; // If the square is already taken or there's a winner, do nothing
     const newBoard = [...board];
     newBoard[index] = "X";
@@ -150,15 +150,20 @@ const TicTacToeVsComputer = () => {
     transition: "background-color 0.2s ease-in-out",
   };
 
-  const renderSquare = (index:number) => (
+  const renderSquare = (index: number) => (
     <Button
       className="square"
       size="xl"
       fontSize="3xl"
       onClick={() => handleClick(index)}
       style={{
-        color: board[index] === 'X' ? 'red' : board[index] === 'O' ? 'blue' : 'inherit',
-        ...cellStyle
+        color:
+          board[index] === "X"
+            ? "red"
+            : board[index] === "O"
+            ? "blue"
+            : "inherit",
+        ...cellStyle,
       }}
       isDisabled={board[index] !== null || winner || !playerTurn}
     >
@@ -184,37 +189,41 @@ const TicTacToeVsComputer = () => {
           dispatch(setWinner(res?.data?.winner));
         }
       })
-      .catch((err:any) => { 
-        throw new  err;
+      .catch((err: any) => {
+        throw new err();
       });
   };
-  
 
   return (
-    <Box textAlign="center" p={4} >
+    <Box textAlign="center" p={4}>
       <Text fontSize="2xl" fontWeight="bold">
         Tic-Tac-Toe vs Computer
       </Text>
 
       <Box mt={4}>
-      <CustomCard flexDirection="column" w="100%" p="34px">
-
-        <Text fontSize="xl">{getStatusMessage()}</Text>
-        <SimpleGrid columns={3} spacing={2} mt={4} className="board">
-          {board.map((square:any, index:number) => (
-            <Center key={index}>{renderSquare(index)}</Center>
-          ))}
-        </SimpleGrid>
-        {(winner || !board.includes(null)) && (
-          <Button
-            colorScheme="blue"
-            onClick={resetGame}
-            mt={4}
-            className="btn"
-          >
-            Restart Game
-          </Button>
-        )}
+        <CustomCard flexDirection="column" w="100%" p="34px">
+          <Text fontSize="xl">{getStatusMessage()}</Text>
+          <Flex justifyContent="center" alignItems="center">
+            <Box className="board">
+              {" "}
+              {board.map((_square: any, index: number) => (
+                <Center key={index ** (2 ** 3 + 1)}>
+                  {renderSquare(index)}
+                </Center>
+              ))}
+            </Box>
+          </Flex>
+          <Flex justifyContent="center" alignItems="center">
+            {(winner || !board?.includes(null)) && (
+              <Button
+                colorScheme="blue"
+                onClick={resetGame}
+                mt={4}
+              >
+                Restart Game
+              </Button>
+            )}
+          </Flex>
         </CustomCard>
       </Box>
     </Box>

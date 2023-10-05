@@ -1,4 +1,4 @@
-import  { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import {
   Box,
@@ -20,6 +20,7 @@ import { apiWithToken } from "../../../../utitlities/API";
 import { useNavigate, useParams } from "react-router-dom";
 const MineSweeper = () => {
   const textColor = useColorModeValue("secondaryGray.900", "white");
+  const localStorage: any = window?.localStorage;
 
   const dispatch = useDispatch();
   const params: any = useParams();
@@ -27,12 +28,31 @@ const MineSweeper = () => {
   const { board, gameOver, score } = useSelector(
     (state: any) => state.mineSweeper
   );
+  const [highestScore, setHighestScore] = useState(0);
 
-const min = 19;
-const max = 50;
-const randomNumber = Math.floor(Math.random() * (max - min + 1)) + min;
+  const min = 19;
+  const max = 50;
+  const randomNumber = Math.floor(Math.random() * (max - min + 1)) + min;
 
-  console.log(board, gameOver, score);
+  const getHighestScore = () => {
+    const userId = JSON.parse(localStorage.getItem("user"))?.userId;
+    const gameType = "minesweeper"; // Replace with your game type
+    const highestScoreKey = `${userId}_${gameType}_highest_score`;
+    const storedScore = localStorage.getItem(highestScoreKey);
+    return storedScore ? parseInt(storedScore) : 0;
+  };
+
+  // Function to update the highest score for the current user and game type in localStorage
+  const updateHighestScore = (newScore: number) => {
+    const userId = JSON.parse(localStorage.getItem("user"))?.userId; // Replace with your user ID retrieval logic
+    const gameType = "minesweeper"; // Replace with your game type
+    const highestScoreKey = `${userId}_${gameType}_highest_score`;
+    const currentHighestScore = getHighestScore();
+    if (newScore > currentHighestScore) {
+      localStorage.setItem(highestScoreKey, newScore.toString());
+      setHighestScore(newScore);
+    }
+  };
 
   const createBoard = (rows: number, cols: number, minesCount: number) => {
     const newBoard = Array.from({ length: rows }, () =>
@@ -63,6 +83,7 @@ const randomNumber = Math.floor(Math.random() * (max - min + 1)) + min;
 
     if (board[row][col]?.isMine) {
       dispatch(setGameOver(true));
+      updateHighestScore(score);
     }
 
     const updatedBoard = board.map((boardRow: any, rowIndex: any) =>
@@ -81,7 +102,7 @@ const randomNumber = Math.floor(Math.random() * (max - min + 1)) + min;
     dispatch(setBoard(createBoard(10, 10, randomNumber)));
     dispatch(setScore(0));
     dispatch(setGameOver(false));
-    navigate('/game/minesweeper')
+    navigate("/game/minesweeper");
   };
 
   const getGameStateById = (id: any) => {
@@ -94,8 +115,8 @@ const randomNumber = Math.floor(Math.random() * (max - min + 1)) + min;
           dispatch(setScore(res?.data?.score));
         }
       })
-      .catch((err:any) => { 
-        throw new  err;
+      .catch((err: any) => {
+        throw new err();
       });
   };
 
@@ -103,14 +124,17 @@ const randomNumber = Math.floor(Math.random() * (max - min + 1)) + min;
     if (!params?.id) {
       dispatch(setBoard(createBoard(10, 10, randomNumber)));
     }
+    // Retrieve the highest score when the component mounts
+    const userHighestScore = getHighestScore();
+    setHighestScore(userHighestScore);
   }, [dispatch]);
 
-  useEffect(()=>{
-    if(params?.id){
+  useEffect(() => {
+    if (params?.id) {
       getGameStateById(params?.id);
     }
-  // eslint-disable-next-line react-hooks/exhaustive-deps
-  },[params?.id])
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [params?.id]);
 
   return (
     <>
@@ -130,7 +154,7 @@ const randomNumber = Math.floor(Math.random() * (max - min + 1)) + min;
             {board?.map((row: any, rowIndex: number) =>
               row.map((cell: any, colIndex: number) => (
                 <GridItem
-                  key={colIndex}
+                  key={colIndex * (2 + 43)}
                   className={`cell ${cell.isOpen ? "open" : ""}`}
                   onClick={() => handleCellClick(rowIndex, colIndex)}
                   p="2"
@@ -140,6 +164,7 @@ const randomNumber = Math.floor(Math.random() * (max - min + 1)) + min;
                   bgColor={cell.isOpen ? "gray.200" : "gray.100"}
                   width={"50px"}
                   height={"50px"}
+                  borderRadius={"5px"}
                 >
                   {cell.isOpen ? (cell.isMine ? "💣" : "1") : ""}
                 </GridItem>
@@ -156,6 +181,9 @@ const randomNumber = Math.floor(Math.random() * (max - min + 1)) + min;
               >
                 <Text className="game-over" mt="2" textAlign={"center"}>
                   Game Over! Score: {score}
+                </Text>
+                <Text mt="2" textAlign={"center"} color={"green"}>
+                  Highest Score: {highestScore}
                 </Text>
                 <Button
                   variant={"outline"}

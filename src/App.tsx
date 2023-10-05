@@ -1,3 +1,4 @@
+import { useEffect, useState, lazy, Suspense } from "react";
 import { Route, Routes } from "react-router-dom";
 import SignIn from "./components/SignIn";
 import SignUp from "./components/SignUp";
@@ -5,13 +6,19 @@ import SignUp from "./components/SignUp";
 import "./App.css";
 import LandingPage from "./components/LandingPage";
 // import AdminNavbar from "./components/NavBar";
-import T3 from "../src/components/Games/TicTacToe/index";
+// import T3 from "../src/components/Games/TicTacToe/index";
 import { useSelector } from "react-redux";
-import { useEffect, useState } from "react";
-import MineSweeperGame from "../src/components/Games/MineSweeper/index";
+// import MineSweeperGame from "../src/components/Games/MineSweeper/index";
 import { Box, Spinner } from "@chakra-ui/react";
-
 // import PrivateRoute from "../HOC/PrivateRoute";
+
+// const SignIn = lazy(() => import("./components/SignIn"));
+// const SignUp = lazy(() => import("./components/SignUp"));
+// const LandingPage = lazy(() => import("./components/LandingPage"));
+const T3 = lazy(() => import("../src/components/Games/TicTacToe/index"));
+const MineSweeperGame = lazy(
+  () => import("../src/components/Games/MineSweeper/index")
+);
 function App() {
   const authState = useSelector((state: any) => state.auth);
   const [isAuthenticated, setIsAuthenticated] = useState(false);
@@ -62,14 +69,55 @@ function App() {
             )}
             {isAuthenticated && (
               <>
-                <Route path={`/`} element={<LandingPage />} />
+                <Route
+                  path={`/`}
+                  element={
+                    <Suspense
+                      fallback={
+                        <div className="loading-container">Loading...</div>
+                      }
+                    >
+                      <LandingPage />
+                    </Suspense>
+                  }
+                />
                 <Route path={`/signin`} element={<LandingPage />} />
                 <Route path={`/home`} element={<LandingPage />} />
-                <Route path={`/game/tictactoe/multiplayer`} element={<T3 />} />
-                <Route path={`/game/tictactoe/computer/:id?`} element={<T3/>} />
+                <Route
+                  path={`/game/tictactoe/multiplayer`}
+                  element={
+                    <Suspense
+                      fallback={
+                        <div className="loading-container">Loading...</div>
+                      }
+                    >
+                      <T3 />
+                    </Suspense>
+                  }
+                />
+                <Route
+                  path={`/game/tictactoe/computer/:id?`}
+                  element={
+                    <Suspense
+                      fallback={
+                        <div className="loading-container">Loading...</div>
+                      }
+                    >
+                      <T3 />
+                    </Suspense>
+                  }
+                />
                 <Route
                   path={`/game/minesweeper/:id?`}
-                  element={<MineSweeperGame />}
+                  element={
+                    <Suspense
+                      fallback={
+                        <div className="loading-container">Loading...</div>
+                      }
+                    >
+                      <MineSweeperGame />
+                    </Suspense>
+                  }
                 />
               </>
             )}

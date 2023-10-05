@@ -40,3 +40,13 @@
 .read-the-docs {
   color: #888;
 } */
+
+.loading-container {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 100vh;
+  background-color: rgba(0, 0, 0, 0.8); /* Use a semi-transparent dark background */
+  color: #fff; /* Use a light text color */
+  /* Add more styling as needed */
+}

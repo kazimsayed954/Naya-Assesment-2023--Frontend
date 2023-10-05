@@ -1,4 +1,3 @@
-import React from "react";
 import MultiplayerT3 from "../TicTacToe/Multiplayer/index";
 
 import withNavbar from "../../../../HOC/withNavbar";

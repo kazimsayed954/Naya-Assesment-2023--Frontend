@@ -32,6 +32,7 @@ export default function NavbarLinks(props: { secondary: boolean }) {
   const textColor = useColorModeValue("secondaryGray.900", "white");
 
   const borderColor = useColorModeValue("#E6ECFA", "rgba(135, 140, 189, 0.3)");
+  const localStorage:any = window.localStorage;
   const shadow = useColorModeValue(
     "14px 17px 40px 4px rgba(112, 144, 176, 0.18)",
     "14px 17px 40px 4px rgba(112, 144, 176, 0.06)"
@@ -78,7 +79,7 @@ export default function NavbarLinks(props: { secondary: boolean }) {
           <Avatar
             _hover={{ cursor: "pointer" }}
             color="white"
-            name={JSON.parse(localStorage.getItem("user"))?.name}
+            name={JSON.parse(localStorage.getItem("user"))?.name ||  ""}
             bg="#11047A"
             size="sm"
             w="40px"

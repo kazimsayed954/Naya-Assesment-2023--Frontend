@@ -92,7 +92,7 @@ export default function GameCard(props: {
               fontSize="12px"
             >
               {players?.map((avt, key) => (
-                <Avatar key={key} src={avt} />
+                <Avatar key={key+(2**3)} src={avt} />
               ))}
             </AvatarGroup>
           </Flex>

@@ -8,6 +8,7 @@ import SignUp from "./components/SignUp";
 import LandingPage from "./components/LandingPage";
 
 import "./App.css";
+import { apiWithToken } from "./utitlities/API";
 const T3 = lazy(() => import("../src/components/Games/TicTacToe/index"));
 const MineSweeperGame = lazy(
   () => import("../src/components/Games/MineSweeper/index")
@@ -28,6 +29,20 @@ function App() {
     }
     setIsLoading(false);
   }, [authState]);
+
+  useEffect(()=>{
+    if(isAuthenticated){
+      apiWithToken?.get(`/api/v1/game/highscore/getuserhighscore`)
+      .then((res:any)=>{
+        if(res?.data?.length>0){
+          res?.data?.map((item:any)=>{
+            localStorage.setItem(`${item?.userId}_${item?.gameType}_highest_score`,item?.score);
+          })
+        }
+      })
+      .catch((err)=>console.log(err));
+    }
+  },[isAuthenticated])
   return (
     <>
       <main>

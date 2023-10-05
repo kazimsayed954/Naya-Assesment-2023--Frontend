@@ -66,7 +66,6 @@ function SignIn() {
       const response = await apiWithToken.post("/api/v1/signin", formData);
 
       // Handle the response, e.g., store user data in state or redirect to another page
-      console.log("API response:", response.data);
       if (response.status === 200) {
         toast({
           title: response.data?.message,
@@ -83,7 +82,7 @@ function SignIn() {
           })
         );
         navigate("/home");
-        // window.location.reload();
+        window.location.reload();
       }
 
       // Reset the form data

@@ -37,7 +37,7 @@ const MineSweeper = () => {
 
   const getHighestScore = () => {
     const userId = JSON.parse(localStorage.getItem("user"))?.userId;
-    const gameType = "minesweeper"; // Replace with your game type
+    const gameType = "minesweeper"; 
     const highestScoreKey = `${userId}_${gameType}_highest_score`;
     const storedScore = localStorage.getItem(highestScoreKey);
     return storedScore ? parseInt(storedScore) : 0;
@@ -50,6 +50,9 @@ const MineSweeper = () => {
     const highestScoreKey = `${userId}_${gameType}_highest_score`;
     const currentHighestScore = getHighestScore();
     if (newScore > currentHighestScore) {
+      apiWithToken.post(`/api/v1/game/highscore/savehighscore`,{gameType,score:newScore})
+      .then()
+      .catch();
       localStorage.setItem(highestScoreKey, newScore.toString());
       setHighestScore(newScore);
     }

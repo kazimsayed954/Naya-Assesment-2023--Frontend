@@ -8,6 +8,7 @@ import {
   Image,
   Text,
   useColorModeValue,
+  AvatarBadge,
 } from "@chakra-ui/react";
 // Custom components
 import Card from "../Card/index";
@@ -25,6 +26,7 @@ export default function GameCard(props: {
   const { image, name, subtitle, players, path, highestscore } = props;
   const textColor = useColorModeValue("navy.700", "white");
   const textColorBid = useColorModeValue("brand.500", "white");
+  
   return (
     <Card p="20px">
       <Flex direction={{ base: "column" }} justify="center">
@@ -92,7 +94,9 @@ export default function GameCard(props: {
               fontSize="12px"
             >
               {players?.map((avt, key) => (
-                <Avatar key={key+(2**3)} src={avt} />
+                <Avatar key={key+(2**3)} src={avt}>
+                      <AvatarBadge boxSize='1em' bg='green.500' placement="bottom-end" />
+                </Avatar>
               ))}
             </AvatarGroup>
           </Flex>

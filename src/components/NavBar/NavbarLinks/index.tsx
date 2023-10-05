@@ -19,7 +19,7 @@ import { useNavigate } from "react-router-dom";
 // Custom Components
 
 
-export default function NavbarLinks(props: { secondary: boolean }) {
+export default function   NavbarLinks(props: { secondary: boolean }) {
   const { secondary } = props;
   const { colorMode, toggleColorMode } = useColorMode();
   // Chakra Color Mode
@@ -46,12 +46,14 @@ export default function NavbarLinks(props: { secondary: boolean }) {
     <Flex
       w={{ sm: "100%", md: "auto" }}
       alignItems="center"
-      flexDirection="row"
+      flexDirection="row" 
       bg={menuBg}
       flexWrap={secondary ? { base: "wrap", md: "nowrap" } : "unset"}
       p="10px"
       borderRadius="30px"
       boxShadow={shadow}
+      justifyContent={{ base: "flex-end", md: "flex-start" }}
+
     >
       <Button
         variant="no-hover"

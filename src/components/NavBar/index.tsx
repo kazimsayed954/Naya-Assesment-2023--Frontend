@@ -176,6 +176,8 @@ export default function AdminNavbar(props: {
 			borderRadius="30px"
 			boxShadow={shadow}
 		  >
+		
+
             {isHome && (
               <SearchBar
 			  mt='5px'

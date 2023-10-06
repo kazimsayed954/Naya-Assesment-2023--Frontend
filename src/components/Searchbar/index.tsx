@@ -11,11 +11,12 @@ export function SearchBar(props: {
   background?: string;
   children?: any;
   placeholder?: string;
+  onSearch?:any;
   borderRadius?: string | number;
   [x: string]: any;
 }) {
   // Pass the computed styles into the `__css` prop
-  const { background, placeholder, borderRadius, ...rest } = props;
+  const { background, placeholder, borderRadius,onSearch, ...rest } = props;
   // Chakra Color Mode
   const searchIconColor = useColorModeValue("gray.700", "white");
   const inputBg = useColorModeValue("secondaryGray.300", "navy.900");
@@ -23,7 +24,7 @@ export function SearchBar(props: {
 
   const handleInputChange = (event:any) => {
     const query = event.target.value;
-    props.onSearch(query); // Call the onSearch prop with the query
+    onSearch(query); // Call the onSearch prop with the query
   };
   return (
     <InputGroup w={{ base: "100%", md: "200px" }} {...rest}>

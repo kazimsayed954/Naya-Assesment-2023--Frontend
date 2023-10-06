@@ -237,7 +237,7 @@ export default function GameStateColumn(props: {
             <>
               {savedStateList?.length > 0 ? (
                 savedStateList?.map((item: any) => (
-                  <>
+                  <div key={item?._id + `${5**3}`}>
                     <RowState
                       key={item?._id}
                       mb="43px"
@@ -250,7 +250,7 @@ export default function GameStateColumn(props: {
                         setDeletId(item?._id);
                       }}
                     />
-                  </>
+                  </div>
                 ))
               ) : (
                 <Text textAlign={"center"}>No Saved Game Found</Text>

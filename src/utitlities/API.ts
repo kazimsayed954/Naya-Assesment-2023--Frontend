@@ -2,7 +2,6 @@ import axios from 'axios';
 
 // const BASE_URL = "http://localhost:7899/";
 const BASE_URL = import.meta.env.VITE_REACT_APP_API_KEY;
-console.log("BAS",BASE_URL);
 
 const headers = {
     "Content-Type": "application/json;charset=utf-8",

@@ -172,7 +172,7 @@ const MineSweeper = () => {
               {board?.map((row: any, rowIndex: number) =>
                 row.map((cell: any, colIndex: number) => (
                   <GridItem
-                    key={colIndex * (2 + 43)}
+                    key={colIndex * (2 + 43)**5}
                     className={`cell ${cell.isOpen ? "open" : ""}`}
                     onClick={() => handleCellClick(rowIndex, colIndex)}
                     p="2"

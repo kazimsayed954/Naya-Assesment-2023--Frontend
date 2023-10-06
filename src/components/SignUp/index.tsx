@@ -72,7 +72,6 @@ function SignUp() {
       const response = await apiWithToken.post("/api/v1/signup", formData);
 
       // Handle the response, e.g., store user data in state or redirect to another page
-      console.log("API response:", response.data);
       if(response.status === 201){
         toast({
           title: response.data?.message,

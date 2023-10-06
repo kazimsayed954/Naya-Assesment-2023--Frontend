@@ -1,3 +1,6 @@
+# Live Demo Link:-
+[LIVE DEMO ]( https://naya-frontend-task-2023.netlify.app/) 
+
 # React + TypeScript + Vite
 
 This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.

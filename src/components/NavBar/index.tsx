@@ -35,7 +35,7 @@ export default function AdminNavbar(props: {
 
   const { secondary, brandText } = props;
   const isHome = window?.location?.href?.includes("home");
-  const [searchQuery, setSearchQuery] = useState("");
+  const [_searchQuery, setSearchQuery] = useState("");
   const delay = 500;
   let searchTimer:number;
 

@@ -118,7 +118,7 @@ const MuliplayerT3 = () => {
         if (socket.id === id) {
           dispatch(setStatusMessage("You Win")); // Dispatch to update statusMessage
         } else {
-          dispatch(setStatusMessage(`${name} Wins`)); // Dispatch to update statusMessage
+          dispatch(setStatusMessage(`$Opponent Wins`)); // Dispatch to update statusMessage
         }
         dispatch(setShowModal(true)); // Dispatch to update showModal
         dispatch(setEnd(true)); // Dispatch to update end
